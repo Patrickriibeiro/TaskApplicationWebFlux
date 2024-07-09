@@ -1,1 +1,10 @@
-spring.application.name=tasks
+spring:
+  application:
+    name: task
+  data:
+    mongodb:
+      database: task
+      repositories:
+        type: auto
+      authentication-database: admin
+      uri: mongodb://localhost:27017

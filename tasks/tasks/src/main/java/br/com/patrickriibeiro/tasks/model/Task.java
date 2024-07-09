@@ -2,24 +2,29 @@ package br.com.patrickriibeiro.tasks.model;
 
 
 import br.com.patrickriibeiro.tasks.service.TaskService;
+import org.springframework.data.annotation.Id;
 
 public class Task {
 
-    private String title;
-    private String description;
-    private int priority;
-    private TaskState state;
+    @Id
+    private String id;
 
-    public Task newTask() {
-        TaskService.taskList.add(this);
-        return this;
-    }
+    private String title;
+
+    private String description;
+
+    private int priority;
+
+    private TaskState state;
 
     public Task insert(){
         return builderFrom(this)
                 .withState(TaskState.INSERT)
                 .build();
     };
+
+    public Task() {
+    }
 
     public Task(Builder builder) {
        this.title = builder.getTitle();
@@ -34,6 +39,10 @@ public class Task {
 
     public int getPriority() {
         return priority;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public TaskState getState() {
@@ -54,12 +63,14 @@ public class Task {
 
     public static class Builder {
 
+        private String id;
         private String title;
         private String description;
         private int priority;
         private TaskState state;
 
         public Builder(Task task) {
+            this.id = task.getId();
             this.title = task.getTitle();
             this.description = task.getDescription();
             this.priority = task.getPriority();
@@ -67,6 +78,10 @@ public class Task {
         }
 
         public Builder() {
+        }
+
+        public String getId(){
+            return id;
         }
 
         public String getTitle() {
@@ -88,6 +103,11 @@ public class Task {
         public Builder withTitle(String Title) {
           this.title = title;
           return this;
+        }
+
+        public Builder withId(String id) {
+            this.id = id;
+            return this;
         }
 
         public Builder withDescription(String description) {

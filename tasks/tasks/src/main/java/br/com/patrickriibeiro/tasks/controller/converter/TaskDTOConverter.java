@@ -2,6 +2,7 @@ package br.com.patrickriibeiro.tasks.controller.converter;
 
 import br.com.patrickriibeiro.tasks.controller.dto.TaskDTO;
 import br.com.patrickriibeiro.tasks.model.Task;
+import br.com.patrickriibeiro.tasks.model.TaskState;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class TaskDTOConverter {
       return Optional.ofNullable(task)
               .map(source -> {
                   TaskDTO dto = new TaskDTO();
+                  dto.setId(task.getId());
                   dto.setTitle(task.getTitle());
                   dto.setDescription(source.getDescription());
                   dto.setPriority(source.getPriority());
@@ -44,6 +46,15 @@ public class TaskDTOConverter {
               )
               .orElse(new ArrayList<>());
     };
+
+    public Task convert(String id, String title, String description, int priority, TaskState taskState){
+        return Task.builder()
+                .withId(id)
+                .withDescription(description)
+                .withPriority(priority)
+                .withState(taskState)
+                .build();
+    }
 
 
 }
