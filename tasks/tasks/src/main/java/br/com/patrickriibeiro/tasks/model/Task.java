@@ -27,6 +27,7 @@ public class Task {
     }
 
     public Task(Builder builder) {
+        this.id = builder.getId();
        this.title = builder.getTitle();
        this.description = builder.getDescription();
        this.priority = builder.getPriority();
@@ -100,14 +101,14 @@ public class Task {
             return state;
         }
 
-        public Builder withTitle(String Title) {
-          this.title = title;
-          return this;
-        }
-
         public Builder withId(String id) {
             this.id = id;
             return this;
+        }
+
+        public Builder withTitle(String title) {
+          this.title = title;
+          return this;
         }
 
         public Builder withDescription(String description) {

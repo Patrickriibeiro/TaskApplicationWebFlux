@@ -1,4 +1,4 @@
-package br.com.patrickriibeiro.tasks.controller.repository;
+package br.com.patrickriibeiro.tasks.repository;
 
 import br.com.patrickriibeiro.tasks.model.Task;
 import org.springframework.data.domain.*;

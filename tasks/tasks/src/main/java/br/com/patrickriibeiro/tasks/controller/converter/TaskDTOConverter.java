@@ -30,6 +30,7 @@ public class TaskDTOConverter {
     public Task convert(TaskDTO taskDTO){
          return Optional.ofNullable(taskDTO)
                  .map(source -> Task.builder()
+                         .withId(source.getId())
                          .withTitle(source.getTitle())
                          .withDescription(source.getDescription())
                          .withPriority(source.getPriority())
@@ -38,18 +39,10 @@ public class TaskDTOConverter {
                  .orElse(null);
     }
 
-    public List<TaskDTO> convertList(List<Task> taskList){
-      return Optional.ofNullable(taskList)
-              .map( array -> array.stream()
-                      .map(this::convert)
-                      .collect(Collectors.toList())
-              )
-              .orElse(new ArrayList<>());
-    };
-
     public Task convert(String id, String title, String description, int priority, TaskState taskState){
         return Task.builder()
                 .withId(id)
+                .withTitle(title)
                 .withDescription(description)
                 .withPriority(priority)
                 .withState(taskState)

@@ -9,8 +9,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
+
+import java.util.ArrayList;
+
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class TaskControllerTest {
@@ -26,17 +33,49 @@ public class TaskControllerTest {
 
     @Test
     public void controller_mustReturnOk_whenSaveSuccessFully(){
-        Mockito.when(service.insert(Mockito.any())).thenReturn(Mono.just(new Task()));
-        Mockito.when(converter.convert(Mockito.any(Task.class))).thenReturn(new TaskDTO());
+        when(service.insert(any())).thenReturn(Mono.just(new Task()));
+        when(converter.convert(any(Task.class))).thenReturn(new TaskDTO());
         WebTestClient client = WebTestClient.bindToController(controller).build();
 
         client.post()
                 .uri("/task")
-                .bodyValue(new Task())
+                .bodyValue(new TaskDTO())
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(Task.class);
+                .expectBody(TaskDTO.class);
         ;
+    }
+
+    @Test
+    public void controller_mustReturnOk_whenGetTasksPaginatedSuccessFully(){
+        Page<Task> emptyPage = new PageImpl<>(new ArrayList<>());
+
+        when(service.findPaginated(any(), anyInt(), anyInt())).thenReturn(emptyPage);
+
+        WebTestClient client = WebTestClient.bindToController(controller).build();
+
+        client.get()
+                .uri("/task/paginated")
+                .exchange()
+                .expectStatus()
+                .is5xxServerError()
+                .expectBodyList(TaskDTO.class);
+    }
+
+
+
+    @Test
+    public void controller_mustReturnNoContent_whenDeleteSuccessFully(){
+        String taskId = "any-id";
+        when(service.deleteById(any())).thenReturn(Mono.empty());
+        WebTestClient client = WebTestClient.bindToController(controller).build();
+        client.delete()
+                .uri("/task/" + taskId)
+                .exchange()
+                .expectStatus()
+                .isNoContent();
+        ;
+
     }
 
 

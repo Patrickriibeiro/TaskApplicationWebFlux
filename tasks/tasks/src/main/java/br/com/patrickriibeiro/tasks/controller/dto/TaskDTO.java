@@ -13,6 +13,14 @@ public class TaskDTO {
     public TaskDTO() {
     }
 
+    public TaskDTO(String id, String title, String description, int priority, TaskState state) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.priority = priority;
+        this.state = state;
+    }
+
     public TaskDTO(String title, String description, int priority, TaskState state, String id) {
         this.title = title;
         this.description = description;

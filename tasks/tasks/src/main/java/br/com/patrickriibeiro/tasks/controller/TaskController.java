@@ -26,7 +26,7 @@ public class TaskController {
         this.converter = converter;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/paginated")
     public Page<TaskDTO> getTasks(@RequestParam(required = false) String id,
                                   @RequestParam(required = false) String title,
                                   @RequestParam(required = false) String description,
@@ -38,8 +38,7 @@ public class TaskController {
                 .map(converter::convert);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     public Mono<TaskDTO> createTask(@RequestBody TaskDTO taskDTO){
         return taskService.insert(converter.convert(taskDTO))
                 .map(converter::convert);

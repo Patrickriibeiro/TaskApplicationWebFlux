@@ -1,17 +1,13 @@
 package br.com.patrickriibeiro.tasks.service;
 
-import br.com.patrickriibeiro.tasks.controller.dto.TaskDTO;
-import br.com.patrickriibeiro.tasks.controller.repository.TaskCustomRepository;
-import br.com.patrickriibeiro.tasks.controller.repository.TaskRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.com.patrickriibeiro.tasks.repository.TaskCustomRepository;
+import br.com.patrickriibeiro.tasks.repository.TaskRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import br.com.patrickriibeiro.tasks.model.Task;
 import reactor.core.publisher.Mono;
 
-import javax.print.DocFlavor;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
