@@ -29,7 +29,9 @@ public class TaskService {
     public Mono<Task> insert(Task task) {
         return Mono.just(task)
                 .map(Task::insert)
-                .flatMap(this::save);
+                .flatMap(this::save)
+                .doOnError(error -> LOGGER.info("Error during save task. Title: {}", task.getTitle(), error));
+                //.onErrorResume(it -> Mono.just(Task.builder().withTitle("Error").build())); // Retorna um obj default.
     };
 
     public Mono<List<Task>> list(){
