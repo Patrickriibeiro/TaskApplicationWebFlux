@@ -2,6 +2,8 @@ package br.com.patrickriibeiro.tasks.service;
 
 import br.com.patrickriibeiro.tasks.repository.TaskCustomRepository;
 import br.com.patrickriibeiro.tasks.repository.TaskRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ import java.util.List;
 
 @Service
 public class TaskService {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(TaskService.class);
 
     private final TaskRepository taskRepository;
 
@@ -42,6 +46,7 @@ public class TaskService {
 
     private Mono<Task> save(Task task){
         return Mono.just(task)
+                .doOnNext(t -> LOGGER.info("Saving task with title {}", t.getTitle()))
                 .map(taskRepository::save);
     };
 

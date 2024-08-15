@@ -2,20 +2,20 @@ package br.com.patrickriibeiro.tasks.controller;
 
 import br.com.patrickriibeiro.tasks.controller.converter.TaskDTOConverter;
 import br.com.patrickriibeiro.tasks.controller.dto.TaskDTO;
-import br.com.patrickriibeiro.tasks.model.Task;
 import br.com.patrickriibeiro.tasks.model.TaskState;
 import br.com.patrickriibeiro.tasks.service.TaskService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/task")
 public class TaskController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TaskController.class);
 
     private final TaskService taskService;
 
@@ -41,6 +41,7 @@ public class TaskController {
     @PostMapping
     public Mono<TaskDTO> createTask(@RequestBody TaskDTO taskDTO){
         return taskService.insert(converter.convert(taskDTO))
+                .doOnNext(task -> LOGGER.info("Saved task with id {}", task.getId()))
                 .map(converter::convert);
     }
 
@@ -48,6 +49,7 @@ public class TaskController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> delete(@PathVariable String id){
         return Mono.just(id)
+                .doOnNext(it -> LOGGER.info("Deleting task with id {}", it))
                 .flatMap(taskService::deleteById);
     }
 
