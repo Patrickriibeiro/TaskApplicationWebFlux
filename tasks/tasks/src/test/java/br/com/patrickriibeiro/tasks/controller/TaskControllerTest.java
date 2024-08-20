@@ -9,7 +9,6 @@ import br.com.patrickriibeiro.tasks.service.TaskService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -18,7 +17,8 @@ import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -55,7 +55,7 @@ public class TaskControllerTest {
     public void controller_mustReturnOk_whenGetTasksPaginatedSuccessFully(){
         Page<Task> emptyPage = new PageImpl<>(new ArrayList<>());
 
-        when(service.findPaginated(any(), anyInt(), anyInt())).thenReturn(emptyPage);
+        when(service.findPaginated(any(), anyInt(), anyInt())).thenReturn(Mono.just(emptyPage));
 
         WebTestClient client = WebTestClient.bindToController(controller).build();
 
