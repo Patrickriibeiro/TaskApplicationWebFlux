@@ -1,5 +1,7 @@
 package br.com.patrickriibeiro.tasks.service;
 
+import br.com.patrickriibeiro.tasks.controller.dto.TaskDTO;
+import br.com.patrickriibeiro.tasks.exception.TaskNotFoundException;
 import br.com.patrickriibeiro.tasks.repository.TaskCustomRepository;
 import br.com.patrickriibeiro.tasks.repository.TaskRepository;
 import org.slf4j.Logger;
@@ -47,5 +49,13 @@ public class TaskService {
                 .doOnNext(t -> LOGGER.info("Saving task with title {}", t.getTitle()))
                 .flatMap(taskRepository::save);
     };
+
+    public Mono<Task> update(Task task) {
+        return taskRepository.findById(task.getId())
+                .map(task::update)
+                .flatMap(taskRepository::save)
+                .switchIfEmpty(Mono.error(TaskNotFoundException::new))
+                .doOnError(error -> LOGGER.error("Error during update task with id: {}, Message: {}", task.getId(), error.getMessage()));
+    }
 
 }
