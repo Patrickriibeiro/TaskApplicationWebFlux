@@ -1,6 +1,7 @@
 package br.com.patrickriibeiro.tasks.model;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
 
 public class ErrorResponse {
 
@@ -37,6 +38,13 @@ public class ErrorResponse {
                 .withMessage(exception.getMessage())
                 .build();
 
+    }
+
+    public static ErrorResponse invalidArgumentsError(FieldError fieldError) {
+        return ErrorResponse.builder()
+                .withStatus(HttpStatus.BAD_REQUEST.value())
+                .withMessage(fieldError.getDefaultMessage())
+                .build();
     }
 
     public static class Builder {
