@@ -9,3 +9,5 @@ Criação de um projeto web, reativo e assincrono -> org.springframework.boot:sp
 
 Swagger UI, diferente do Core, contem a famosa interface grafica -> org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0
 Obs "pessoal": Caso não seja necessario expor a documentação para uma equipe externa de devs, utilizar um core, acho mais performatico. 
+
+Spring validation, realizar validações baseadas nas anotações Constraints do Jakarta : org.springframework.boot:spring-boot-starter-validation
