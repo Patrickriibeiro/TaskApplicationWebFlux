@@ -10,3 +10,7 @@ spring:
       uri: mongodb://localhost:27017
   messages:
     basename: validation-messages
+
+via:
+  cep:
+    url: https://viacep.com.br/ws
