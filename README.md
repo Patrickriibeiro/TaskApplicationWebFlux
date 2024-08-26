@@ -1,9 +1,3 @@
-Aqui está uma versão melhorada do seu README:
-
----
-
-## Versão Utilizada
-
 **MongoDB Community Server:** [7.0.1 (Current)](https://mongodb.com/try/download/community)
 
 ## Dependências Utilizadas
