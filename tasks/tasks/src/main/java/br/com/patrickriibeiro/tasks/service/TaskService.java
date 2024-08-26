@@ -1,18 +1,15 @@
 package br.com.patrickriibeiro.tasks.service;
 
-import br.com.patrickriibeiro.tasks.controller.dto.TaskDTO;
 import br.com.patrickriibeiro.tasks.exception.TaskNotFoundException;
+import br.com.patrickriibeiro.tasks.model.Address;
+import br.com.patrickriibeiro.tasks.model.Task;
 import br.com.patrickriibeiro.tasks.repository.TaskCustomRepository;
 import br.com.patrickriibeiro.tasks.repository.TaskRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
-import br.com.patrickriibeiro.tasks.model.Task;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 @Service
 public class TaskService {
@@ -23,9 +20,12 @@ public class TaskService {
 
     private final TaskCustomRepository taskCustomRepository;
 
-    public TaskService(TaskRepository taskRepository, TaskCustomRepository taskCustomRepository) {
+    private final AddressService addressService;
+
+    public TaskService(TaskRepository taskRepository, TaskCustomRepository taskCustomRepository,AddressService addressService) {
         this.taskRepository = taskRepository;
         this.taskCustomRepository = taskCustomRepository;
+        this.addressService = addressService;
     }
 
     public Mono<Task> insert(Task task) {
@@ -56,6 +56,21 @@ public class TaskService {
                 .flatMap(taskRepository::save)
                 .switchIfEmpty(Mono.error(TaskNotFoundException::new))
                 .doOnError(error -> LOGGER.error("Error during update task with id: {}, Message: {}", task.getId(), error.getMessage()));
+    }
+
+    public Mono<Task> start(String id, String zipCode){
+        return taskRepository.findById(id)
+                .zipWhen( it -> addressService.getAddress(zipCode))
+                .flatMap( it -> updateAddress(it.getT1(),it.getT2()))
+                .map(Task::start)
+                .flatMap(taskRepository::save)
+                .switchIfEmpty(Mono.error(TaskNotFoundException::new))
+                .doOnError(error -> LOGGER.error("Error on start task. ID: {}", id, error));
+    }
+
+    private Mono<Task> updateAddress(Task task, Address address){
+        return Mono.just(task)
+                .map(it -> task.updateAddress(address));
     }
 
 }

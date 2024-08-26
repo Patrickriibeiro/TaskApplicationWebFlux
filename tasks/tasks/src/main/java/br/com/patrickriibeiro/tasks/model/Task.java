@@ -17,6 +17,8 @@ public class Task {
 
     private TaskState state;
 
+    private Address address;
+
     public Task insert(){
         return builderFrom(this)
                 .withState(TaskState.INSERT)
@@ -38,6 +40,7 @@ public class Task {
        this.description = builder.getDescription();
        this.priority = builder.getPriority();
        this.state = builder.getState();
+       this.address = builder.getAddress();
     }
 
     public static Builder builderFrom(Task task){
@@ -64,9 +67,25 @@ public class Task {
         return title;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
     public static Builder builder(){
       return new Builder();
     };
+
+    public Task updateAddress(Address address) {
+        return builderFrom(this)
+                .withAddress(address)
+                .build();
+    }
+
+    public Task start() {
+        return builderFrom(this)
+                .withState(TaskState.DOING)
+                .build();
+    }
 
     public static class Builder {
 
@@ -75,6 +94,7 @@ public class Task {
         private String description;
         private int priority;
         private TaskState state;
+        private Address address;
 
         public Builder(Task task) {
             this.id = task.getId();
@@ -82,6 +102,7 @@ public class Task {
             this.description = task.getDescription();
             this.priority = task.getPriority();
             this.state = task.getState();
+            this.address = task.getAddress();
         }
 
         public Builder() {
@@ -107,6 +128,10 @@ public class Task {
             return state;
         }
 
+        public Address getAddress() {
+            return address;
+        }
+
         public Builder withId(String id) {
             this.id = id;
             return this;
@@ -129,6 +154,11 @@ public class Task {
 
         public Builder withState(TaskState state) {
             this.state = state;
+            return this;
+        }
+
+        public Builder withAddress(Address address) {
+            this.address = address;
             return this;
         }
 
