@@ -1,5 +1,6 @@
 package br.com.patrickriibeiro.tasks.controller.dto;
 
+import br.com.patrickriibeiro.tasks.model.Address;
 import br.com.patrickriibeiro.tasks.model.TaskState;
 
 public class TaskDTO {
@@ -9,24 +10,9 @@ public class TaskDTO {
     private String description;
     private int priority;
     private TaskState state;
+    private Address address;
 
     public TaskDTO() {
-    }
-
-    public TaskDTO(String id, String title, String description, int priority, TaskState state) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.priority = priority;
-        this.state = state;
-    }
-
-    public TaskDTO(String title, String description, int priority, TaskState state, String id) {
-        this.title = title;
-        this.description = description;
-        this.priority = priority;
-        this.state = state;
-        this.id = id;
     }
 
     public String getId() {
@@ -69,6 +55,13 @@ public class TaskDTO {
         this.state = state;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 }
 
 

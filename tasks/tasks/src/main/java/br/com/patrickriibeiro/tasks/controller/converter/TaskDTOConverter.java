@@ -17,11 +17,12 @@ public class TaskDTOConverter {
       return Optional.ofNullable(task)
               .map(source -> {
                   TaskDTO dto = new TaskDTO();
-                  dto.setId(task.getId());
-                  dto.setTitle(task.getTitle());
+                  dto.setId(source.getId());
+                  dto.setTitle(source.getTitle());
                   dto.setDescription(source.getDescription());
                   dto.setPriority(source.getPriority());
-                  dto.setState(task.getState());
+                  dto.setState(source.getState());
+                  dto.setAddress(source.getAddress());
                   return dto;
               })
               .orElse(null);

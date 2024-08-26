@@ -12,13 +12,13 @@ public class Address implements Serializable {
     @JsonProperty("logradouro")
     private String street;
 
-    @JsonProperty("logradouro")
+    @JsonProperty("complemento")
     private String complement;
 
     @JsonProperty("bairro")
     private String neighborhood;
 
-    @JsonProperty("cidade")
+    @JsonProperty("localidade")
     private String city;
 
     @JsonProperty("uf")

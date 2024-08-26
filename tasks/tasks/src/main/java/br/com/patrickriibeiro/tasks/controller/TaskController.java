@@ -72,5 +72,11 @@ public class TaskController {
                 .map(converter::convert);
     }
 
+    @PostMapping("/start")
+    public Mono<TaskDTO> start(@RequestParam String id, @RequestParam String zipCode){
+        return taskService.start(id,zipCode)
+                .map(converter::convert);
+    }
+
 
 }
