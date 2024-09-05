@@ -27,3 +27,9 @@ Para integrar a API ViaCep, utilizei a anotação `@JsonProperty` do pacote `fas
 ## Documentação
 
 Para mais informações sobre a API ViaCep, acesse a [documentação oficial](https://viacep.com.br/).
+
+### Docker
+- **Url Docker Desktop:** https://www.docker.com/products/docker-desktop/
+
+### Offset Explorer e Kafka 
+- **Url Offset Explorer:** https://kafkatool.com/download.html
