@@ -10,7 +10,32 @@ spring:
       uri: mongodb://localhost:27017
   messages:
     basename: validation-messages
+  cloud:
+    stream:
+      binders:
+        broker: localhost:9092
+      kafka:
+        binder:
+          auto-create-topics: true
+  kafka:
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: br.com.patrickriibeiro.tasks.model
+
+kafka:
+  task:
+    notification:
+      output:  task-notification-v1
 
 via:
   cep:
     url: https://viacep.com.br/ws
+
+
+

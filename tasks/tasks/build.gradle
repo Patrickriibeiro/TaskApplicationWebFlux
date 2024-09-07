@@ -17,14 +17,35 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+	set('springCloudVersion', "2022.0.4")
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+	implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+
+	//Validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// MongoDB
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+
+	// Swagger
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+
+	// Kafka
+	implementation 'org.apache.kafka:kafka-streams'
+	implementation 'org.springframework.cloud:spring-cloud-stream'
+	implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka'
+	implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka-streams'
+	implementation 'org.springframework.kafka:spring-kafka'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+	testImplementation 'org.springframework.cloud:spring-cloud-stream-test-binder'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
