@@ -33,3 +33,8 @@ Para mais informações sobre a API ViaCep, acesse a [documentação oficial](ht
 
 ### Offset Explorer e Kafka 
 - **Offset Explorer:** https://kafkatool.com/download.html
+- **Dependência:** `org.apache.kafka:kafka-streams`
+	                 `org.springframework.cloud:spring-cloud-stream`
+	                 `org.springframework.cloud:spring-cloud-stream-binder-kafka`
+	                 `org.springframework.cloud:spring-cloud-stream-binder-kafka-streams`
+	                 `org.springframework.kafka:spring-kafka`
