@@ -13,7 +13,15 @@ spring:
   cloud:
     stream:
       binders:
-        broker: localhost:9092
+        kafka-binder:  # Nome do binder
+          type: kafka
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      brokers: localhost:9092
       kafka:
         binder:
           auto-create-topics: true
@@ -36,6 +44,3 @@ kafka:
 via:
   cep:
     url: https://viacep.com.br/ws
-
-
-

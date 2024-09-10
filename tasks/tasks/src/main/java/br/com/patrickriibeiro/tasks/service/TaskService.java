@@ -1,6 +1,7 @@
 package br.com.patrickriibeiro.tasks.service;
 
 import br.com.patrickriibeiro.tasks.exception.TaskNotFoundException;
+import br.com.patrickriibeiro.tasks.messaging.TaskNotificationProducer;
 import br.com.patrickriibeiro.tasks.model.Address;
 import br.com.patrickriibeiro.tasks.model.Task;
 import br.com.patrickriibeiro.tasks.repository.TaskCustomRepository;
@@ -22,10 +23,13 @@ public class TaskService {
 
     private final AddressService addressService;
 
-    public TaskService(TaskRepository taskRepository, TaskCustomRepository taskCustomRepository,AddressService addressService) {
+    private final TaskNotificationProducer taskNotificationProducer;
+
+    public TaskService(TaskRepository taskRepository, TaskCustomRepository taskCustomRepository,AddressService addressService, TaskNotificationProducer taskNotificationProducer) {
         this.taskRepository = taskRepository;
         this.taskCustomRepository = taskCustomRepository;
         this.addressService = addressService;
+        this.taskNotificationProducer = taskNotificationProducer;
     }
 
     public Mono<Task> insert(Task task) {
@@ -64,6 +68,7 @@ public class TaskService {
                 .flatMap( it -> updateAddress(it.getT1(),it.getT2()))
                 .map(Task::start)
                 .flatMap(taskRepository::save)
+                .flatMap(taskNotificationProducer::sendNotification)
                 .switchIfEmpty(Mono.error(TaskNotFoundException::new))
                 .doOnError(error -> LOGGER.error("Error on start task. ID: {}", id, error));
     }
