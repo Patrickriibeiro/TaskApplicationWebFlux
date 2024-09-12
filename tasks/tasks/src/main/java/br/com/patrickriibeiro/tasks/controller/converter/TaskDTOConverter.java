@@ -23,6 +23,7 @@ public class TaskDTOConverter {
                   dto.setPriority(source.getPriority());
                   dto.setState(source.getState());
                   dto.setAddress(source.getAddress());
+                  dto.setCreated(source.getCreated());
                   return dto;
               })
               .orElse(null);

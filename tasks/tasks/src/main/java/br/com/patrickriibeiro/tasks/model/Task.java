@@ -3,7 +3,11 @@ package br.com.patrickriibeiro.tasks.model;
 
 import br.com.patrickriibeiro.tasks.service.TaskService;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+
+//@Document(collection = "task")  Define o nome da coleção onde os documentos dessa entidade serão armazenados.
 public class Task {
 
     @Id
@@ -19,9 +23,12 @@ public class Task {
 
     private Address address;
 
+    private LocalDate created;
+
     public Task insert(){
         return builderFrom(this)
                 .withState(TaskState.INSERT)
+                .withCreated(LocalDate.now())
                 .build();
     };
 
@@ -41,6 +48,7 @@ public class Task {
        this.priority = builder.getPriority();
        this.state = builder.getState();
        this.address = builder.getAddress();
+       this.created = builder.created;
     }
 
     public static Builder builderFrom(Task task){
@@ -71,6 +79,10 @@ public class Task {
         return address;
     }
 
+    public LocalDate getCreated() {
+        return created;
+    }
+
     public static Builder builder(){
       return new Builder();
     };
@@ -87,6 +99,22 @@ public class Task {
                 .build();
     }
 
+    public Task done() {
+        return builderFrom(this)
+                .withState(TaskState.DONE)
+                .build();
+    }
+
+    public Task createdNow() {
+        return builderFrom(this)
+                .withCreated(LocalDate.now())
+                .build();
+    }
+
+    public boolean createdIsEmpty() {
+        return this.created == null;
+    }
+
     public static class Builder {
 
         private String id;
@@ -95,6 +123,7 @@ public class Task {
         private int priority;
         private TaskState state;
         private Address address;
+        private LocalDate created;
 
         public Builder(Task task) {
             this.id = task.getId();
@@ -103,6 +132,7 @@ public class Task {
             this.priority = task.getPriority();
             this.state = task.getState();
             this.address = task.getAddress();
+            this.created = task.created;
         }
 
         public Builder() {
@@ -132,6 +162,10 @@ public class Task {
             return address;
         }
 
+        public LocalDate getCreated() {
+            return created;
+        }
+
         public Builder withId(String id) {
             this.id = id;
             return this;
@@ -159,6 +193,11 @@ public class Task {
 
         public Builder withAddress(Address address) {
             this.address = address;
+            return this;
+        }
+
+        public Builder withCreated(LocalDate created) {
+            this.created = created;
             return this;
         }
 

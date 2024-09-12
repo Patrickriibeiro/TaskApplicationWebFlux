@@ -2,15 +2,36 @@ package br.com.patrickriibeiro.tasks.controller.dto;
 
 import br.com.patrickriibeiro.tasks.model.Address;
 import br.com.patrickriibeiro.tasks.model.TaskState;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TaskDTO {
 
+    @NotBlank(message = "{blank.id}")
     private String id;
+
+    @NotBlank(message = "{blank.title}")
+    @Size(min = 3, max = 20, message = "{size.title}")
     private String title;
+
+    @NotBlank(message = "{blank.description}")
+    @Size(min = 10, max = 50, message = "{size.description}")
     private String description;
+
+    @Min(value = 1, message = "{min.priority}")
     private int priority;
+
+    @NotBlank(message = "{blank.state}")
     private TaskState state;
+
     private Address address;
+
+    private LocalDate created;
 
     public TaskDTO() {
     }
@@ -61,6 +82,14 @@ public class TaskDTO {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public LocalDate getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDate created) {
+        this.created = created;
     }
 }
 
