@@ -13,6 +13,23 @@ import java.util.stream.Collectors;
 @Component
 public class TaskDTOConverter {
 
+    public List<TaskDTO> convertList(List<Task> tasks) {
+        return tasks.stream()
+                .map(task -> {
+                    TaskDTO dto = new TaskDTO();
+                    dto.setId(task.getId());
+                    dto.setTitle(task.getTitle());
+                    dto.setDescription(task.getDescription());
+                    dto.setPriority(task.getPriority());
+                    dto.setState(task.getState());
+                    dto.setAddress(task.getAddress());
+                    dto.setCreated(task.getCreated());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+
     public TaskDTO convert(Task task){
       return Optional.ofNullable(task)
               .map(source -> {
