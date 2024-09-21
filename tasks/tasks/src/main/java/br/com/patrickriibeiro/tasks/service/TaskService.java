@@ -6,6 +6,7 @@ import br.com.patrickriibeiro.tasks.model.Address;
 import br.com.patrickriibeiro.tasks.model.Task;
 import br.com.patrickriibeiro.tasks.repository.TaskCustomRepository;
 import br.com.patrickriibeiro.tasks.repository.TaskRepository;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -103,4 +106,23 @@ public class TaskService {
                 .map(Task::createdNow)
                 .flatMap(taskRepository::save);
     }
+
+    @PostConstruct
+    private void scheduleDoneOlderTasks(){
+        Mono.delay(Duration.ofSeconds(5))
+                .doOnNext(it -> LOGGER.info("Starting task Monitoring"))
+                .subscribe();
+
+        Flux.interval(Duration.ofSeconds(10))
+                .flatMap(it -> doneOlderTasks())
+                .filter(tasks -> tasks > 0)
+                .doOnNext(tasks -> LOGGER.info("{} tasks completed after being active for over 7 days.", tasks))
+                .subscribe();
+
+    }
+
+    private Mono<Long> doneOlderTasks() {
+        return taskCustomRepository.updateStateToDoneForOlderTasks(LocalDate.now().minusDays(7));
+    }
+
 }

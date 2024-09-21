@@ -1,14 +1,19 @@
 package br.com.patrickriibeiro.tasks.repository;
 
 import br.com.patrickriibeiro.tasks.model.Task;
+import br.com.patrickriibeiro.tasks.model.TaskState;
+import com.mongodb.client.result.UpdateResult;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -16,8 +21,11 @@ public class TaskCustomRepository {
 
     private final ReactiveMongoOperations mongoOperations;
 
-    public TaskCustomRepository(ReactiveMongoOperations mongoOperations) {
+    private final ReactiveMongoTemplate reactiveMongoTemplate;
+
+    public TaskCustomRepository(ReactiveMongoOperations mongoOperations, ReactiveMongoTemplate reactiveMongoTemplate) {
         this.mongoOperations = mongoOperations;
+        this.reactiveMongoTemplate = reactiveMongoTemplate;
     }
 
     public Mono<Page<Task>> findPaginated(Task task, Integer page, Integer size){
@@ -25,6 +33,15 @@ public class TaskCustomRepository {
                     .zipWith(pageable(page,size))
                     .flatMap(it -> execute(task, it.getT1(), it.getT2()));
     }
+
+    public Mono<Long> updateStateToDoneForOlderTasks(LocalDate date) {
+        return reactiveMongoTemplate.updateMulti(
+                        Query.query(Criteria.where("created").lte(date).and("state").is(TaskState.DOING)),
+                        Update.update("state", TaskState.DONE),
+                        Task.class)
+                .map(UpdateResult::getModifiedCount);
+    }
+
 
     private Mono<Page<Task>> execute(Task task, Example<Task> example, Pageable pageable) {
         return query(example,pageable,task)
